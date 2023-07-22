@@ -55,7 +55,10 @@ function FormPlayer() {
   return (
     <div>
       {" "}
-      <form className="flex flex-col gap-5" action={handleSubmit(submitData)}>
+      <form
+        className="flex flex-col gap-5"
+        action={handleSubmit(submitData) as () => void}
+      >
         <label> First Name: </label>
         <input
           className="border border-black p-2"

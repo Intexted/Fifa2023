@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { prisma } from "@/db";
 
 type FormData = {
   firstName: string;
@@ -10,7 +11,7 @@ type FormData = {
   devise: string;
 };
 
-const submitData = async (data: FormData) => {
+const submitData = async (data: any) => {
   const firstName = data.firstName;
   await prisma.player.create({
     data: {
