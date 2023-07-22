@@ -1,0 +1,22 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+    provider             = "mysql"
+    url                  = env("DATABASE_URL")
+    referentialIntegrity = "prisma"
+}
+
+model Player {
+    id          Int       @id @default(autoincrement())
+    firstname   String
+    lastname    String
+    goal        Int
+    salary      Int
+    devise      String
+    pictureURl  String  @db.Text
+}
+
+
