@@ -19,7 +19,10 @@ export default async function Home() {
         </Link>
       </div>
       <hr />
-      <div className="border-2 border-gray-900 w-[65%] mx-auto mt-10 h-[400px] rounded-md p-2">
+      <div
+        className="border-2 border-gray-900 w-[65%] mx-auto
+       mt-10 h-[300px] rounded-md p-2 gap-10"
+      >
         <table className="">
           <tr className="flex items-center  justify-between gap-5 border-b border-black ">
             <th className="font-medium text-gray-500">id</th>
@@ -33,11 +36,13 @@ export default async function Home() {
               className="flex items-center text-left justify-between gap-10 "
               key={player.id}
             >
-              <td>{player.id}</td>
-              <td className="">{player.firstname + " " + player.lastname}</td>
-              <td>{player.salary + player.devise}</td>
-              <td>{player.goal}</td>
-              <td>actions</td>
+              <td className="mb-4">{player.id}</td>
+              <td className="mb-4">
+                {player.firstname + " " + player.lastname}
+              </td>
+              <td className="mb-4">{player.salary + player.devise}</td>
+              <td className="mb-4">{player.goal}</td>
+              <td className="mb-4">actions</td>
             </tr>
           ))}
         </table>
