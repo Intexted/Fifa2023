@@ -4,10 +4,14 @@ import DeleteButton from "./components/DeleteButton";
 import { getPlayers } from "@/actions";
 import Pagination from "./components/Pagination";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const players = await getPlayers();
-  const prev = 7;
-  const next = 13;
+
+  const page = Number(searchParams.page) || 0;
 
   return (
     <main className=" p-15">
@@ -36,7 +40,7 @@ export default async function Home() {
             </tr>
           </thead>
           <tbody>
-            {players.slice(prev, next).map((player) => (
+            {players.slice(page * 6, (page + 1) * 6).map((player) => (
               <tr key={player.id} className="border-b border-gray-300">
                 <td className="px-4 py-2">{player.id}</td>
                 <td className="px-4 py-2">
@@ -85,7 +89,7 @@ export default async function Home() {
             ))}
           </tbody>
         </table>
-        <Pagination prev={prev} next={next} />
+        <Pagination page={page} />
       </div>
     </main>
   );
