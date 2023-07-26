@@ -1,50 +1,85 @@
 import { prisma } from "@/db";
+import formatNumber from "@/utils/formatNumber";
 import Link from "next/link";
-
-function getPlayers() {
-  return prisma.player.findMany();
-}
+import DeleteButton from "./components/DeleteButton";
+import { getPlayers } from "@/actions";
 
 export default async function Home() {
   const players = await getPlayers();
-  console.log(players);
+
   return (
     <main className=" p-15">
       <div className="flex items-center justify-between py-5 px-10">
         <h1 className="font-bold text-2xl">List des joueurs</h1>
         <Link href="/new">
-          <h1 className="shadow-md p-2 border-2 cursor-pointer border-gray-300">
+          <h1 className="shadow-md p-2 border-2 cursor-pointer text-white bg-blue-500 rounded-md">
             + Ajouter un joueur
           </h1>
         </Link>
       </div>
       <hr />
-      <div
-        className="border-2 border-gray-900 w-[65%] mx-auto
-       mt-10 h-[300px] rounded-md p-2 gap-10"
-      >
-        <table className="">
-          <tr className="flex items-center  justify-between gap-5 border-b border-black ">
-            <th className="font-medium text-gray-500">id</th>
-            <th className="font-medium text-gray-500">Nom Complet</th>
-            <th className="font-medium text-gray-500">Salaire Annuel</th>
-            <th className="font-medium text-gray-500">BUT</th>
-            <th className="font-medium text-gray-500">Actions</th>
-          </tr>
-          {players.slice(0, 6).map((player) => (
-            <tr
-              className="flex items-center text-left justify-between gap-10 "
-              key={player.id}
-            >
-              <td className="mb-4">{player.id}</td>
-              <td className="mb-4">
-                {player.firstname + " " + player.lastname}
-              </td>
-              <td className="mb-4">{player.salary + player.devise}</td>
-              <td className="mb-4">{player.goal}</td>
-              <td className="mb-4">actions</td>
+      <div className=" w-[65%] mx-auto mt-10 h-[300px] rounded-md p-2 gap-5">
+        <table className="table-auto w-full">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className=" px-4 py-2 font-medium text-gray-500">id</th>
+              <th className=" px-4 py-2 font-medium text-gray-500">
+                Nom Complet
+              </th>
+              <th className=" px-4 py-2 font-medium text-gray-500">
+                Salaire Annuel
+              </th>
+              <th className=" px-4 py-2 font-medium text-gray-500">BUT</th>
+              <th className=" px-4 py-2 font-medium text-gray-500">Actions</th>
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {players.map((player) => (
+              <tr key={player.id} className="border-b border-gray-300">
+                <td className="px-4 py-2">{player.id}</td>
+                <td className="px-4 py-2">
+                  {player.firstname + " " + player.lastname}
+                </td>
+                <td className="px-4 py-2">
+                  {formatNumber(player.salary, 0) + " " + player.devise}
+                </td>
+                <td className="px-4 py-2">{player.goal}</td>
+                <td className="px-4 py-2">
+                  <div className="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 cursor-pointer text-gray-700"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                      />
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 cursor-pointer text-gray-700"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+                      />
+                    </svg>
+                    <DeleteButton id={player.id} />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </main>

@@ -2,17 +2,14 @@
 
 import { redirect } from "next/navigation";
 import { prisma } from "@/db";
+import { FormData } from "./typings";
+import { revalidatePath } from "next/cache";
 
-type FormData = {
-  firstName: string;
-  lastName: string;
-  salary: number;
-  goal: number;
-  devise: string;
-};
+export async function getPlayers() {
+  return await prisma.player.findMany();
+}
 
-const submitData = async (data: any) => {
-  const firstName = data.firstName;
+export const submitData = async (data: FormData) => {
   await prisma.player.create({
     data: {
       firstname: data.firstName,
@@ -23,25 +20,15 @@ const submitData = async (data: any) => {
       pictureURl: "",
     },
   });
-  console.log(firstName);
+  revalidatePath("/");
   redirect("/");
-  console.log("IT WORKED", data);
 };
 
-// async function submitData(data: FormData) {
-//   const firstName = data.firstName;
-//   // await prisma.player.create({ data:{
-//   //   firstName,
-//   //   lastName,
-//   //   salary,
-//   //   goal ,
-//   //   devise,
-//   // }
-
-//   //  });
-//   console.log("qsdq", firstName, data);
-//   // redirect("/");
-//   console.log("IT WORKED", data);
-// }
-
-export default submitData;
+export const deletePlayer = async (id: number) => {
+  await prisma.player.delete({
+    where: {
+      id,
+    },
+  });
+  revalidatePath("/");
+};

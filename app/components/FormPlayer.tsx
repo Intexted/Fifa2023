@@ -4,19 +4,12 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/db";
 import Link from "next/link";
 
-import submitData from "@/actions";
+import { submitData } from "@/actions";
 
 import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-type FormData = {
-  firstName: string;
-  lastName: string;
-  salary: number;
-  goal: number;
-  devise: string;
-};
+import { FormData } from "@/typings";
 
 function FormPlayer() {
   const schema: ZodType<FormData> = z.object({
@@ -24,7 +17,7 @@ function FormPlayer() {
     lastName: z.string().min(2).max(30),
     salary: z.number(),
     goal: z.number(),
-    devise: z.string(),
+    devise: z.string().min(1),
   });
 
   const {
@@ -34,68 +27,77 @@ function FormPlayer() {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
-  //   const submitData = (data: FormData) => {
-  //     // "use server";
-  //     const firstName = data.firstName;
-  //     prisma.player.create({
-  //       data: {
-  //         firstname: data.firstName,
-  //         lastname: data.lastName,
-  //         salary: data.salary,
-  //         goal: data.goal,
-  //         devise: data.devise,
-  //         pictureURl: "",
-  //       },
-  //     });
-  //     console.log(firstName);
-  //     redirect("/");
-  //     console.log("IT WORKED", data);
-  //   };
 
   return (
     <div>
       {" "}
       <form
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-2 w-[50%] mx-auto"
         action={handleSubmit(submitData) as () => void}
       >
-        <label> First Name:</label>
+        {/* <label> First Name:</label> */}
         <input
-          className="border border-black p-2"
+          className="border border-black rounded-md p-2"
           type="text"
+          placeholder="First Name"
           {...register("firstName")}
         />
-        {errors.firstName && <span> {errors.firstName.message}</span>}
-        <label> Last Name: </label>
+        {errors.firstName && (
+          <span className="text-red-600"> {errors.firstName.message}</span>
+        )}
+        {/* <label> Last Name: </label> */}
         <input
-          className="border border-black p-2"
+          className="border border-black rounded-md p-2"
           type="text"
+          placeholder="Last Name"
           {...register("lastName")}
         />
-        {errors.lastName && <span> {errors.lastName.message}</span>}
-        <label> salaire Annuel </label>
+        {errors.lastName && (
+          <span className="text-red-600"> {errors.lastName.message}</span>
+        )}
+        {/* <label> salaire Annuel </label> */}
         <input
-          className="border border-black p-2"
+          className="border border-black rounded-md p-2"
           type="number"
+          placeholder="salaire Annuel"
           {...register("salary", { valueAsNumber: true })}
         />
-        {errors.salary && <span> {errors.salary.message}</span>}
-        <label> devise </label>
+        {errors.salary && (
+          <span className="text-red-600"> {errors.salary.message}</span>
+        )}
+        {/* <label> devise </label> */}
         <input
-          className="border border-black p-2"
+          className="border border-black rounded-md p-2"
           type="text"
+          placeholder="devise"
           {...register("devise")}
         />
-        {errors.devise && <span> {errors.devise.message}</span>}
-        <label> But </label>
+        {errors.devise && (
+          <span className="text-red-600"> {errors.devise.message}</span>
+        )}
+        {/* <label> But </label> */}
         <input
-          className="border border-black p-2"
+          className="border border-black rounded-md p-2"
           type="number"
+          placeholder="But"
           {...register("goal", { valueAsNumber: true })}
         />
-        {errors.goal && <span> {errors.goal.message}</span>}
-
-        <input className="border border-black p-2" type="submit" />
+        {errors.goal && (
+          <span className="text-red-600"> {errors.goal.message}</span>
+        )}
+        <div className="flex items-center gap-2 w-full">
+          <button
+            className="border border-black rounded-md bg-blue-600 text-white cursor-pointer p-2 flex-1"
+            type="submit"
+          >
+            Ajouter
+          </button>
+          <Link href="..">
+            <button className="border border-black rounded-md bg-gray-600 text-white cursor-pointer p-2">
+              Cancel
+            </button>
+          </Link>
+        </div>
       </form>
     </div>
   );
