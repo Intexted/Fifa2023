@@ -1,11 +1,13 @@
-import { prisma } from "@/db";
 import formatNumber from "@/utils/formatNumber";
 import Link from "next/link";
 import DeleteButton from "./components/DeleteButton";
 import { getPlayers } from "@/actions";
+import Pagination from "./components/Pagination";
 
 export default async function Home() {
   const players = await getPlayers();
+  const prev = 7;
+  const next = 13;
 
   return (
     <main className=" p-15">
@@ -18,23 +20,23 @@ export default async function Home() {
         </Link>
       </div>
       <hr />
-      <div className=" w-[65%] mx-auto mt-10 h-[300px] rounded-md p-2 gap-5">
+      <div className=" w-[65%] mx-auto my-10 h-[300px] rounded-md p-2 gap-5">
         <table className="table-auto w-full">
           <thead>
             <tr className="bg-gray-200">
-              <th className=" px-4 py-2 font-medium text-gray-500">id</th>
-              <th className=" px-4 py-2 font-medium text-gray-500">
+              <th className="  px-4 py-2 font-medium text-gray-500">id</th>
+              <th className="  px-4 py-2 font-medium text-gray-500">
                 Nom Complet
               </th>
-              <th className=" px-4 py-2 font-medium text-gray-500">
+              <th className="  px-4 py-2 font-medium text-gray-500">
                 Salaire Annuel
               </th>
-              <th className=" px-4 py-2 font-medium text-gray-500">BUT</th>
-              <th className=" px-4 py-2 font-medium text-gray-500">Actions</th>
+              <th className="  px-4 py-2 font-medium text-gray-500">BUT</th>
+              <th className="  px-4 py-2 font-medium text-gray-500">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {players.map((player) => (
+            {players.slice(prev, next).map((player) => (
               <tr key={player.id} className="border-b border-gray-300">
                 <td className="px-4 py-2">{player.id}</td>
                 <td className="px-4 py-2">
@@ -46,20 +48,22 @@ export default async function Home() {
                 <td className="px-4 py-2">{player.goal}</td>
                 <td className="px-4 py-2">
                   <div className="flex items-center gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 cursor-pointer text-gray-700"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                      />
-                    </svg>
+                    <Link href={`/update/${player.id}`}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6 cursor-pointer text-gray-700"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
+                      </svg>
+                    </Link>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 cursor-pointer text-gray-700"
@@ -81,6 +85,7 @@ export default async function Home() {
             ))}
           </tbody>
         </table>
+        <Pagination prev={prev} next={next} />
       </div>
     </main>
   );

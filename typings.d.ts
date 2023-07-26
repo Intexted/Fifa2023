@@ -1,6 +1,6 @@
 export type FormData = {
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   salary: number;
   goal: number;
   devise: string;
