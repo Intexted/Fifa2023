@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import FormPlayer from "../../components/FormPlayer";
+import { prisma } from "@/db";
 
 async function App({ params }: { params: { id: number } }) {
   const user = await prisma.player.findUnique({
@@ -33,7 +34,7 @@ async function App({ params }: { params: { id: number } }) {
           </button>
         </Link>
       </div>
-      <FormPlayer id={params.id} user={user} />
+      {user !== null && <FormPlayer id={params.id} user={user} />}
     </div>
   );
 }
